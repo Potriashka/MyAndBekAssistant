@@ -18,18 +18,13 @@ rujokes = ["- Запомни, умный человек всегда во всё
 lang = input("Print your language here (en/ru): ")
 
 def speak(text):
-    tts = gTTS(text=text, lang=lang)
     filename = "voice.mp3"
-    try:
-        tts.save(filename)
-    except:
-        print("faild to build the audio")
     if lang == "ru":
+        tts = gTTS(text=text, lang="ru")
+        try:
+            tts.save(filename)
+        except:
         print(f"\nАссистент: {text}\n")
-    else:
-        print(f"\nAssistant: {text}\n")
-    playsound(filename)
-    remove(filename)
 
 def get_audio():
     r = sr.Recognizer()
