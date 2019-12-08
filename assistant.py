@@ -122,7 +122,7 @@ while True:
             text = text.split()
             speak(f"{text[0]} / {text[-1]} = {text[0] / text[-1]}")   
             
-        elif "set" and "timer" in text:
+        elif "timer" in text:
             speak("Please, write the number of seconds to set the timer.")
             t = int(input())
             speak("Started!")
@@ -141,10 +141,10 @@ while True:
         elif text == None:
             sleep(1)
 
-        elif "tell" in text and "joke" in text:
+        elif "joke" in text:
             speak(jokes[randrange(len(jokes))])
 
-        elif "what" in text and "time" in text:
+        elif "time" in text:
             speak(datetime.now())
 
         elif 'date' in text:
@@ -177,7 +177,7 @@ while True:
             elif "шутка" in text or "шутку" in text or "пошути" in text:
                 speak(rujokes[randrange(len(rujokes))])
 
-            elif "установи" and "таймер" in text:
+            elif "таймер" in text:
                 speak("Пожалуйста, напишите количество секунд на которое поставить таймер.")
                 tr = int(input())
                 speak("Установлено!")
@@ -204,13 +204,13 @@ while True:
             elif "привет" in text:
                 speak("Тебе привет тоже!")
 
-            elif "Как тебя зовут" in text:
+            elif "как тебя зовут" in text:
                 speak("Меня зовут ...")
 
             elif "спасибо" in text:
                 speak("Не за что!")
 
-            elif "Как ты" in text:
+            elif "как ты" in text:
                 speak("Хорошо, спасибо!")
 
             elif "случайное число" in text:
