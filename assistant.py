@@ -21,10 +21,10 @@ def speak(text):
     filename = "voice.mp3"
     if lang == "ru":
         tts = gTTS(text=text, lang="ru")
-        try:
-            tts.save(filename)
-        except:
+        tts.save(filename)
         print(f"\nАссистент: {text}\n")
+        playsound(filename)
+        remove(filename)
 
 def get_audio():
     r = sr.Recognizer()
