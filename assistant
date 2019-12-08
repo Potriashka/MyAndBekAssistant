@@ -1,4 +1,3 @@
-from os import remove
 from time import sleep
 from playsound import playsound
 import speech_recognition as sr
@@ -19,13 +18,15 @@ lang = input("Print your language here (en/ru): ")
 def speak(text):
     tts = gTTS(text=text, lang=lang)
     filename = "voice.mp3"
-    tts.save(filename)
+    try:
+        tts.save(filename)
+    except:
+        print("faild to build the audio")
     if lang == "ru":
         print(f"\nАссистент: {text}\n")
     else:
         print(f"\nAssistant: {text}\n")
     playsound(filename)
-    remove(filename)
 
 def get_audio():
     r = sr.Recognizer()
@@ -74,9 +75,17 @@ while True:
             text = "".join(text)
             translations = translator.translate(text, dest="ru")
             print(translations.text)
+        
+        elif "remember" in text:
+            speak("What do I need to remember?")
+            global info
+            info = get_audio()
+
+        elif "you" in text and "remember" in text:
+            speak(info)
 
         elif "goodbye" in text:
-                speak("Goodbye to you to! Say stop to stop.")
+            speak("Goodbye to you to! Say stop to stop.")
 
         elif "stop" in text:
             break
@@ -168,8 +177,49 @@ while True:
             elif "шутка" in text or "шутку" in text or "пошути" in text:
                 speak(rujokes[randrange(len(rujokes))])
 
+            elif "установи" and "таймер" in text:
+                speak("Пожалуйста, напишите количество секунд на которое поставить таймер.")
+                tr = int(input())
+                speak("Установлено!")
+                sleep(tr)
+                speak("Время истекло!")
+
+            elif "сделай заметку" in text or "напиши это" in text or "запомни это" in text:
+                speak("Что мне нужно запомнить?")
+                note_text = get_audio()
+                note(note_text)
+                speak("Я это записал.")
+
+            elif text == None:
+                sleep(1)
+
+            elif "запомни" in text:
+                speak("Что я должен запомнить?")
+                global info2
+                info2 = get_audio()
+
+            elif "ты" in text or "вы" in text and "запомнил" in text or "запомнила" in text:
+                speak(info)
+
+            elif "привет" in text:
+                speak("Тебе привет тоже!")
+
+            elif "Как тебя зовут" in text:
+                speak("Меня зовут ...")
+
+            elif "спасибо" in text:
+                speak("Не за что!")
+
+            elif "Как ты" in text:
+                speak("Хорошо, спасибо!")
+
+            elif "случайное число" in text:
+                i2 = randrange(100)
+                speak(i2)
+
             else:
                 speak("Извините, но я этого еще не умею!")
+
         except:
             speak("Извините, но я не могу сейчас выполнить эту команду, повторите попозже.")
 
