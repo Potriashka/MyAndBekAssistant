@@ -7,6 +7,8 @@ from datetime import datetime
 from googletrans import Translator
 from random import randrange
 from datetime import datetime
+import pyttsx3
+from os import remove
 
 jokes = ["Why did the hipster burn his mouth on his coffee? Because he drank it before it was cool.", "What is the difference between a well-dressed man on a unicycle and a poorly dressed man on a bicycle? Attire."]
 
@@ -27,6 +29,7 @@ def speak(text):
     else:
         print(f"\nAssistant: {text}\n")
     playsound(filename)
+    remove(filename)
 
 def get_audio():
     r = sr.Recognizer()
@@ -67,7 +70,7 @@ while True:
 
     if lang == "en":
             
-        if "Russian" in text:
+        if "russian" in text:
             translator = Translator()
             text = text.split()
             text.remove("in")
@@ -150,6 +153,13 @@ while True:
         elif 'date' in text:
             import datetime 
             print(datetime.date.today())
+
+        elif "say" in text or "speak" in text:
+                otiq = input('Please, write what I have to say.')
+                import pyttsx3
+                engine = pyttsx3.init()
+                engine.say(otiq)
+                engine.runAndWait()
      
         else:
             speak("Sorry, I didn't understand you. ")
@@ -216,6 +226,29 @@ while True:
             elif "случайное число" in text:
                 i2 = randrange(100)
                 speak(i2)
+
+            elif "произнеси" in text or "скажи" in text:
+                oti = input('Пожалуйста, напишите, что мне надо произнести.')
+                import pyttsx3
+                engine = pyttsx3.init()
+                engine.say(oti)
+                engine.runAndWait()
+
+            elif "+" in text:
+                text = text.split()
+                speak(f"{text[0]} + {text[-1]} = {text[0] + text[-1]}")
+
+            elif "-" in text:
+                text = text.split()
+                speak(f"{text[0]} - {text[-1]} = {text[0] - text[-1]}")
+
+            elif "*" in text:
+                text = text.split()
+                speak(f"{text[0]} * {text[-1]} = {text[0] * text[-1]}")
+            
+            elif "/" in text:
+                text = text.split()
+                speak(f"{text[0]} / {text[-1]} = {text[0] / text[-1]}")
 
             else:
                 speak("Извините, но я этого еще не умею!")
