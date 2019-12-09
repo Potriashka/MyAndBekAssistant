@@ -1,3 +1,4 @@
+#Assistant
 from time import sleep
 from playsound import playsound
 import speech_recognition as sr
@@ -14,6 +15,22 @@ jokes = ["Why did the hipster burn his mouth on his coffee? Because he drank it 
 
 rujokes = ["- Запомни, умный человек всегда во всём сомневается.\nТолько дурак может быть полностью уверенным в чём-то.\n- Ты уверен в этом?\n- Абсолютно.", "— Скажите, какова ваша методика написания диплома?\n— Crtl C, Ctrl V!",
 "Утром мать спрашивает дочь:\n- Что ночью упало с таким грохотом?\n- Одежда\n- А почему так громко?\n- Я не успела из нее вылезти...", "На чемпионате мира по плаванию тройку лидеров замкнул электрик Петров."]
+
+enop ="Say stop to stop."
+
+op = "Скажите стоп, чтоб прекратить работу."
+
+rubye = ["Пока! " + op, "До свидания! " + op, "Увидимся! " + op, "Хорошо пообщались! " + op]
+
+enbye = ["Goddbye! " + enop, "Bye! " + enop, "See you later! " + enop]
+
+enhello = ["Hello!", "Hi!", "Good afternoon!"]
+
+ruhello = ["Доброго времени суток!", "Здравствуйте!", "Привет!"]
+
+ruthank = ["Не за что!", "Всегда пожалуйста!", "Не благодарите!"]
+
+enthank = ["You are welcome!", "Not at all!", "Don't worry about it!"]
 
 lang = input("Print your language here (en/ru): ")
 
@@ -82,19 +99,20 @@ while True:
         elif "you" in text and "remember" in text:
             speak(info)
 
-        elif "goodbye" in text:
-            speak("Goodbye to you to! Say stop to stop.")
+        elif "goodbye" in text or "bye" in text or "see you later" in text:
+            speak(enbye[randrange(len(enbye))])
 
         elif "stop" in text:
             break
 
         elif "hello" in text:
-            speak("Hello to you to!")
+            speak(enhello[randrange(len(enhello))])
 
         elif "what is your name" in text:
             speak("My name is Assistant")
+
         elif "thank you" in text:
-            speak("You are welcome!")
+            speak(enbye[randrange(len(enbye))])
 
         elif "how are you" in text:
             speak("I'm fine, thank you!")
@@ -164,14 +182,14 @@ while True:
     elif lang == "ru":
         try:
             if "кто ты" in text or "что ты умеешь" in text or "кто тебя создал" in text:
-                speak("Я ассистент созданный Ниязовом Бехрузом и Петром Репьевым в декабре 2019. Я могу говорить время и дату, шутить,\n делать заметки и много другого")
+                speak("Я ассистент созданный Ниязовом Бехрузом и Петром Репьевым в декабре 2019. Я могу говорить время и дату, шутить,\nделать заметки и много другого")
 
             elif 'дата' in text:
                 import datetime 
                 print(datetime.date.today())
 
             elif "пока" in text or "до свидания" in text or "прощай" in text:
-                    speak("Пока! Скажите стоп, чтоб прекратить работу.")
+                speak(rubye[randrange(len(rubye))])
 
             elif "стоп" in text:
                 break
@@ -204,16 +222,16 @@ while True:
                 info2 = get_audio()
 
             elif "ты" in text or "вы" in text and "запомнил" in text or "запомнила" in text:
-                speak(info)
+                speak(info2)
 
             elif "привет" in text:
-                speak("Тебе привет тоже!")
+                speak(ruhello[randrange(len(ruhello))])
 
             elif "как тебя зовут" in text:
                 speak("Меня зовут ...")
 
             elif "спасибо" in text:
-                speak("Не за что!")
+                speak(ruthank[randrange(len(ruthank))])
 
             elif "как ты" in text:
                 speak("Хорошо, спасибо!")
@@ -244,6 +262,10 @@ while True:
             elif "/" in text:
                 text = text.split()
                 speak(f"{text[0]} / {text[-1]} = {text[0] / text[-1]}")
+
+            elif "youtube" in text:
+                import webbrowser
+                webbrowser.open("https://youtube.com")
 
             else:
                 speak("Извините, но я этого еще не умею!")
