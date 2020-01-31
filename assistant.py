@@ -1,4 +1,4 @@
-#Assistant
+from os import remove
 from time import sleep
 from playsound import playsound
 import speech_recognition as sr
@@ -8,8 +8,7 @@ from datetime import datetime
 from googletrans import Translator
 from random import randrange
 from datetime import datetime
-import pyttsx3
-from os import remove
+import webbrowser
 
 jokes = ["Why did the hipster burn his mouth on his coffee? Because he drank it before it was cool.", "What is the difference between a well-dressed man on a unicycle and a poorly dressed man on a bicycle? Attire."]
 
@@ -35,13 +34,18 @@ enthank = ["You are welcome!", "Not at all!", "Don't worry about it!"]
 lang = input("Print your language here (en/ru): ")
 
 def speak(text):
-    filename = "voice.mp3"
-    if lang == "ru":
-        tts = gTTS(text=text, lang="ru")
+    try:
+        tts = gTTS(text=text, lang=lang)
+        filename = "voice.mp3"
         tts.save(filename)
-        print(f"\nАссистент: {text}\n")
+        if lang == "ru":
+            print(f"\nАссистент: {text}\n")
+        else:
+            print(f"\nAssistant: {text}\n")
         playsound(filename)
         remove(filename)
+    except:
+        print("error")
 
 def get_audio():
     r = sr.Recognizer()
@@ -82,7 +86,7 @@ while True:
 
     if lang == "en":
             
-        if "russian" in text:
+        if "Russian" in text:
             translator = Translator()
             text = text.split()
             text.remove("in")
@@ -90,17 +94,9 @@ while True:
             text = "".join(text)
             translations = translator.translate(text, dest="ru")
             print(translations.text)
-        
-        elif "remember" in text:
-            speak("What do I need to remember?")
-            global info
-            info = get_audio()
 
-        elif "you" in text and "remember" in text:
-            speak(info)
-
-        elif "goodbye" in text or "bye" in text or "see you later" in text:
-            speak(enbye[randrange(len(enbye))])
+        elif "goodbye" in text:
+            speak("Goodbye to you to! Say stop to stop.")
 
         elif "stop" in text:
             break
@@ -117,6 +113,11 @@ while True:
         elif "how are you" in text:
             speak("I'm fine, thank you!")
 
+        elif "youtube" in text:
+            webbrowser.open("https://www.youtube.com")
+
+        elif "vk" in text:
+            webbrowser.open("https://www.vk.com")
 
         elif "random number generator" in text:
             i = randrange(100)
@@ -138,7 +139,7 @@ while True:
             text = text.split()
             speak(f"{text[0]} / {text[-1]} = {text[0] / text[-1]}")   
             
-        elif "timer" in text:
+        elif "set" and "timer" in text:
             speak("Please, write the number of seconds to set the timer.")
             t = int(input())
             speak("Started!")
@@ -160,19 +161,12 @@ while True:
         elif "joke" in text:
             speak(jokes[randrange(len(jokes))])
 
-        elif "time" in text:
+        elif "what" in text and "time" in text:
             speak(datetime.now())
 
         elif 'date' in text:
             import datetime 
             print(datetime.date.today())
-
-        elif "say" in text or "speak" in text:
-                otiq = input('Please, write what I have to say.')
-                import pyttsx3
-                engine = pyttsx3.init()
-                engine.say(otiq)
-                engine.runAndWait()
      
         else:
             speak("Sorry, I didn't understand you. ")
@@ -182,7 +176,7 @@ while True:
     elif lang == "ru":
         try:
             if "кто ты" in text or "что ты умеешь" in text or "кто тебя создал" in text:
-                speak("Я ассистент созданный Ниязовом Бехрузом и Петром Репьевым в декабре 2019. Я могу говорить время и дату, шутить,\nделать заметки и много другого")
+                speak("Я ассистент созданный Ниязовом Бехрузом и Петром Репьевым в декабре 2019. Я могу говорить время и дату, шутить,\n делать заметки и много другого")
 
             elif 'дата' in text:
                 import datetime 
@@ -191,30 +185,20 @@ while True:
             elif "пока" in text or "до свидания" in text or "прощай" in text:
                 speak(rubye[randrange(len(rubye))])
 
+            elif "привет" in text:
+                speak(ruhello[randrange(len(ruhello))])                
+
             elif "стоп" in text:
                 break
 
-            elif "время" in text or "времени" in text:
-                speak(datetime.now())
+            elif "как ты" in text:
+                speak("Хорошо, спасибо!")
 
-            elif "шутка" in text or "шутку" in text or "пошути" in text:
-                speak(rujokes[randrange(len(rujokes))])
+            elif "спасибо" in text:
+                speak(ruthank[randrange(len(ruthank))])
 
-            elif "таймер" in text:
-                speak("Пожалуйста, напишите количество секунд на которое поставить таймер.")
-                tr = int(input())
-                speak("Установлено!")
-                sleep(tr)
-                speak("Время истекло!")
-
-            elif "сделай заметку" in text or "напиши это" in text or "запомни это" in text:
-                speak("Что мне нужно запомнить?")
-                note_text = get_audio()
-                note(note_text)
-                speak("Я это записал.")
-
-            elif text == None:
-                sleep(1)
+            elif "как тебя зовут" in text:
+                speak("Меня зовут ...")
 
             elif "запомни" in text:
                 speak("Что я должен запомнить?")
@@ -224,28 +208,28 @@ while True:
             elif "ты" in text or "вы" in text and "запомнил" in text or "запомнила" in text:
                 speak(info2)
 
-            elif "привет" in text:
-                speak(ruhello[randrange(len(ruhello))])
-
-            elif "как тебя зовут" in text:
-                speak("Меня зовут ...")
-
-            elif "спасибо" in text:
-                speak(ruthank[randrange(len(ruthank))])
-
-            elif "как ты" in text:
-                speak("Хорошо, спасибо!")
-
-            elif "случайное число" in text:
-                i2 = randrange(100)
-                speak(i2)
+            elif "сделай заметку" in text or "напиши это" in text or "запомни это" in text:
+                speak("Что мне нужно запомнить?")
+                note_text = get_audio()
+                note(note_text)
+                speak("Я это записал.")
 
             elif "произнеси" in text or "скажи" in text:
                 oti = input('Пожалуйста, напишите, что мне надо произнести.')
                 import pyttsx3
                 engine = pyttsx3.init()
                 engine.say(oti)
-                engine.runAndWait()
+                engine.runAndWait()                
+
+            elif "таймер" in text:
+                speak("Пожалуйста, напишите количество секунд на которое поставить таймер.")
+                tr = int(input())
+                speak("Установлено!")
+                sleep(tr)
+                speak("Время истекло!")                
+
+            elif text == None:
+                sleep(1)                                                                                                                
 
             elif "+" in text:
                 text = text.split()
@@ -261,15 +245,33 @@ while True:
             
             elif "/" in text:
                 text = text.split()
-                speak(f"{text[0]} / {text[-1]} = {text[0] / text[-1]}")
+                speak(f"{text[0]} / {text[-1]} = {text[0] / text[-1]}")                
 
-            elif "youtube" in text:
-                import webbrowser
-                webbrowser.open("https://youtube.com")
+            elif "время" in text or "времени" in text:
+                speak(datetime.now())
+
+            elif "произнеси" in text or "скажи" in text:
+                oti = input('Пожалуйста, напишите, что мне надо произнести.')
+                import pyttsx3
+                engine = pyttsx3.init()
+                engine.say(oti)
+                engine.runAndWait()                
+
+            elif "шутка" in text or "шутку" in text or "пошути" in text:
+                speak(rujokes[randrange(len(rujokes))])
+
+            elif "ютюб" in text or "ютуб" in text or "youtube" in text:
+            	webbrowser.open("https://www.youtube.com")
+
+            elif "vk" in text or "вк" in text or "вконтакте" in text:
+            	webbrowser.open("https://www.vk.com")
+
+            elif "случайное число" in text:
+            	i2 = randrange(100)
+            	speak(i2)	
 
             else:
                 speak("Извините, но я этого еще не умею!")
-
         except:
             speak("Извините, но я не могу сейчас выполнить эту команду, повторите попозже.")
 
